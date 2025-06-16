@@ -1,8 +1,8 @@
-import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { isPast } from 'date-fns';
-import TaskCard from '@/components/molecules/TaskCard';
-import EmptyState from '@/components/organisms/EmptyState';
+import React, { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { isPast } from "date-fns";
+import TaskCard from "@/components/molecules/TaskCard";
+import EmptyState from "@/components/organisms/EmptyState";
 
 const TaskList = ({ 
   tasks = [], 
@@ -73,8 +73,8 @@ const TaskList = ({
     });
   }, [tasks, searchQuery, activeFilters]);
 
-  const getCategoryById = (categoryId) => {
-    return categories.find(cat => cat.id === categoryId);
+const getCategoryById = (categoryId) => {
+    return categories.find(cat => cat.Id === categoryId);
   };
 
   if (filteredTasks.length === 0) {
@@ -91,10 +91,14 @@ const TaskList = ({
     return (
       <EmptyState
         icon="CheckSquare"
-        title="No tasks yet"
+title="No tasks yet"
         description="Create your first task to get started with TaskFlow"
         actionLabel="Add Task"
-        onAction={() => window.dispatchEvent(new CustomEvent('add-task'))}
+        onAction={() => {
+          if (typeof window !== 'undefined' && window.CustomEvent) {
+            window.dispatchEvent(new CustomEvent('add-task'));
+          }
+        }}
       />
     );
   }
@@ -113,9 +117,9 @@ const TaskList = ({
               duration: 0.2
             }}
           >
-            <TaskCard
+<TaskCard
               task={task}
-              category={getCategoryById(task.categoryId)}
+              category={getCategoryById(task.category_id)}
               onToggleComplete={onToggleComplete}
               onEdit={onEditTask}
               onDelete={onDeleteTask}

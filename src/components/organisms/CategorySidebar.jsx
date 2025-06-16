@@ -8,7 +8,7 @@ const CategorySidebar = ({
   onCategorySelect,
   className = '' 
 }) => {
-  const allTasksCount = categories.reduce((sum, cat) => sum + cat.taskCount, 0);
+const allTasksCount = categories.reduce((sum, cat) => sum + cat.task_count, 0);
 
   return (
     <div className={`bg-white rounded-xl shadow-elevation border border-gray-100 p-4 ${className}`}>
@@ -21,12 +21,12 @@ const CategorySidebar = ({
 
       <div className="space-y-1">
         {/* All Tasks */}
-        <CategoryItem
+<CategoryItem
           category={{
-            id: null,
-            name: 'All Tasks',
+            Id: null,
+            Name: 'All Tasks',
             color: '#5B4CFF',
-            taskCount: allTasksCount
+            task_count: allTasksCount
           }}
           isActive={activeCategory === null}
           onClick={() => onCategorySelect(null)}
@@ -35,15 +35,15 @@ const CategorySidebar = ({
         {/* Individual Categories */}
         {categories.map((category, index) => (
           <motion.div
-            key={category.id}
+            key={category.Id}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
           >
             <CategoryItem
               category={category}
-              isActive={activeCategory === category.id}
-              onClick={() => onCategorySelect(category.id)}
+              isActive={activeCategory === category.Id}
+              onClick={() => onCategorySelect(category.Id)}
             />
           </motion.div>
         ))}

@@ -63,10 +63,10 @@ const Home = () => {
   }, []);
 
   // Update category task counts when tasks change
-  useEffect(() => {
+useEffect(() => {
     const updateCategoryCounts = async () => {
       const tasksByCategory = tasks.reduce((acc, task) => {
-        acc[task.categoryId] = (acc[task.categoryId] || 0) + 1;
+        acc[task.category_id] = (acc[task.category_id] || 0) + 1;
         return acc;
       }, {});
       
@@ -173,10 +173,9 @@ const Home = () => {
     setSearchQuery('');
   };
 
-  // Filtered tasks based on category
-  const displayTasks = useMemo(() => {
+const displayTasks = useMemo(() => {
     if (activeCategory === null) return tasks;
-    return tasks.filter(task => task.categoryId === activeCategory);
+    return tasks.filter(task => task.category_id === activeCategory);
   }, [tasks, activeCategory]);
 
   // Loading state

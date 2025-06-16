@@ -11,11 +11,11 @@ const AddTaskForm = ({
   initialData = null,
   className = '' 
 }) => {
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     title: initialData?.title || '',
-    categoryId: initialData?.categoryId || categories[0]?.id || '',
+    category_id: initialData?.category_id || categories[0]?.Id || '',
     priority: initialData?.priority || 'medium',
-    dueDate: initialData?.dueDate ? initialData.dueDate.split('T')[0] : ''
+    due_date: initialData?.due_date ? initialData.due_date.split('T')[0] : ''
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,7 +28,7 @@ const AddTaskForm = ({
     try {
       await onSubmit({
         ...formData,
-        dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null
+        due_date: formData.due_date ? new Date(formData.due_date).toISOString() : null
       });
     } finally {
       setIsSubmitting(false);
@@ -72,14 +72,14 @@ const AddTaskForm = ({
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Category
             </label>
-            <select
-              value={formData.categoryId}
-              onChange={(e) => handleChange('categoryId', e.target.value)}
+<select
+              value={formData.category_id}
+              onChange={(e) => handleChange('category_id', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors duration-200"
             >
               {categories.map(category => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
+                <option key={category.Id} value={category.Id}>
+                  {category.Name}
                 </option>
               ))}
             </select>
@@ -101,11 +101,11 @@ const AddTaskForm = ({
           </div>
         </div>
 
-        <Input
+<Input
           label="Due Date (Optional)"
           type="date"
-          value={formData.dueDate}
-          onChange={(e) => handleChange('dueDate', e.target.value)}
+          value={formData.due_date}
+          onChange={(e) => handleChange('due_date', e.target.value)}
         />
 
         <div className="flex gap-3 pt-2">
