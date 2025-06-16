@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
-import Badge from '@/components/atoms/Badge';
+import { motion } from "framer-motion";
+import Badge from "@/components/atoms/Badge";
+import React from "react";
 
 const CategoryItem = ({ 
   category, 
@@ -18,23 +19,22 @@ const CategoryItem = ({
           : 'hover:bg-gray-50 text-gray-700'
       } ${className}`}
     >
-      <div className="flex items-center gap-3">
+<div className="flex items-center gap-3">
         <div 
           className="w-3 h-3 rounded-full"
           style={{ backgroundColor: category.color }}
         />
-        <span className="font-medium">{category.name}</span>
+        <span className="font-medium">{category.Name}</span>
       </div>
       
-      {category.taskCount > 0 && (
+      {category.task_count > 0 && (
         <Badge 
           variant={isActive ? 'primary' : 'default'}
           size="xs"
         >
-          {category.taskCount}
+          {category.task_count}
         </Badge>
       )}
-    </motion.button>
   );
 };
 
