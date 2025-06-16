@@ -1,0 +1,30 @@
+[
+  {
+    "id": "work",
+    "name": "Work",
+    "color": "#5B4CFF",
+    "taskCount": 3,
+    "position": 1
+  },
+  {
+    "id": "personal",
+    "name": "Personal",
+    "color": "#FF6B6B", 
+    "taskCount": 1,
+    "position": 2
+  },
+  {
+    "id": "health",
+    "name": "Health",
+    "color": "#4ECDC4",
+    "taskCount": 1,
+    "position": 3
+  },
+  {
+    "id": "shopping",
+    "name": "Shopping",
+    "color": "#FFD93D",
+    "taskCount": 0,
+    "position": 4
+  }
+]
