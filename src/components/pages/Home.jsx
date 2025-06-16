@@ -1,17 +1,18 @@
-import { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { toast } from 'react-toastify';
-import { taskService, categoryService } from '@/services';
-import TaskList from '@/components/organisms/TaskList';
-import CategorySidebar from '@/components/organisms/CategorySidebar';
-import ProgressWidget from '@/components/molecules/ProgressWidget';
-import SearchBar from '@/components/molecules/SearchBar';
-import FilterToolbar from '@/components/molecules/FilterToolbar';
-import AddTaskForm from '@/components/molecules/AddTaskForm';
-import SkeletonLoader from '@/components/organisms/SkeletonLoader';
-import ErrorState from '@/components/organisms/ErrorState';
-import Button from '@/components/atoms/Button';
-import ApperIcon from '@/components/ApperIcon';
+import React, { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "react-toastify";
+import { categoryService, taskService } from "@/services";
+import TaskList from "@/components/organisms/TaskList";
+import CategorySidebar from "@/components/organisms/CategorySidebar";
+import ProgressWidget from "@/components/molecules/ProgressWidget";
+import SearchBar from "@/components/molecules/SearchBar";
+import FilterToolbar from "@/components/molecules/FilterToolbar";
+import AddTaskForm from "@/components/molecules/AddTaskForm";
+import AddCategoryForm from "@/components/molecules/AddCategoryForm";
+import ErrorState from "@/components/organisms/ErrorState";
+import SkeletonLoader from "@/components/organisms/SkeletonLoader";
+import Button from "@/components/atoms/Button";
+import ApperIcon from "@/components/ApperIcon";
 
 const Home = () => {
   // State management
@@ -31,8 +32,9 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState(null);
   const [activeFilters, setActiveFilters] = useState({});
-  const [showAddForm, setShowAddForm] = useState(false);
+const [showAddForm, setShowAddForm] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Load initial data
@@ -171,6 +173,24 @@ useEffect(() => {
     setActiveFilters({});
     setActiveCategory(null);
     setSearchQuery('');
+};
+
+  // Category operations
+  const handleAddCategory = async (categoryData) => {
+    try {
+      const newCategory = await categoryService.create(categoryData);
+      if (newCategory) {
+        setCategories(prev => [...prev, newCategory]);
+        setShowAddCategoryForm(false);
+        toast.success('Category created successfully!');
+      }
+    } catch (err) {
+      toast.error('Failed to create category');
+    }
+  };
+
+  const handleCancelAddCategory = () => {
+    setShowAddCategoryForm(false);
   };
 
 const displayTasks = useMemo(() => {
@@ -182,45 +202,43 @@ const displayTasks = useMemo(() => {
   if (loading) {
     return (
       <div className="h-screen flex overflow-hidden bg-surface">
-        <div className="flex-1 p-6 overflow-y-auto">
-          <div className="max-w-7xl mx-auto">
+    <div className="flex-1 p-6 overflow-y-auto">
+        <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-full">
-              {/* Sidebar skeleton */}
-              <div className="lg:col-span-1">
-                <div className="bg-white rounded-xl p-4 shadow-elevation">
-                  <div className="h-6 bg-gray-200 rounded animate-pulse mb-4" />
-                  <div className="space-y-3">
-                    {[...Array(4)].map((_, i) => (
-                      <div key={i} className="h-10 bg-gray-200 rounded animate-pulse" />
-                    ))}
-                  </div>
+                {/* Sidebar skeleton */}
+                <div className="lg:col-span-1">
+                    <div className="bg-white rounded-xl p-4 shadow-elevation">
+                        <div className="h-6 bg-gray-200 rounded animate-pulse mb-4" />
+                        <div className="space-y-3">
+                            {[...Array(4)].map(
+                                (_, i) => <div key={i} className="h-10 bg-gray-200 rounded animate-pulse" />
+                            )}
+                        </div>
+                    </div>
                 </div>
-              </div>
-              
-              {/* Main content skeleton */}
-              <div className="lg:col-span-2">
-                <div className="space-y-6">
-                  <div className="h-12 bg-gray-200 rounded animate-pulse" />
-                  <SkeletonLoader count={5} />
+                {/* Main content skeleton */}
+                <div className="lg:col-span-2">
+                    <div className="space-y-6">
+                        <div className="h-12 bg-gray-200 rounded animate-pulse" />
+                        <SkeletonLoader count={5} />
+                    </div>
                 </div>
-              </div>
-              
-              {/* Progress widget skeleton */}
-              <div className="lg:col-span-1">
-                <div className="bg-white rounded-xl p-6 shadow-elevation">
-                  <div className="h-6 bg-gray-200 rounded animate-pulse mb-4" />
-                  <div className="w-24 h-24 bg-gray-200 rounded-full animate-pulse mx-auto mb-4" />
-                  <div className="grid grid-cols-2 gap-4">
-                    {[...Array(4)].map((_, i) => (
-                      <div key={i} className="h-16 bg-gray-200 rounded animate-pulse" />
-                    ))}
-                  </div>
+                {/* Progress widget skeleton */}
+                <div className="lg:col-span-1">
+                    <div className="bg-white rounded-xl p-6 shadow-elevation">
+                        <div className="h-6 bg-gray-200 rounded animate-pulse mb-4" />
+                        <div className="w-24 h-24 bg-gray-200 rounded-full animate-pulse mx-auto mb-4" />
+                        <div className="grid grid-cols-2 gap-4">
+                            {[...Array(4)].map(
+                                (_, i) => <div key={i} className="h-16 bg-gray-200 rounded animate-pulse" />
+                            )}
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
+</div>
     );
   }
 
@@ -238,115 +256,103 @@ const displayTasks = useMemo(() => {
 
   return (
     <div className="h-screen flex overflow-hidden bg-surface">
-      <div className="flex-1 p-4 md:p-6 overflow-y-auto">
+    <div className="flex-1 p-4 md:p-6 overflow-y-auto">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 font-display">
-                TaskFlow
-              </h1>
-              <p className="text-gray-600 mt-1">
-                Organize your day, accomplish your goals
-              </p>
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900 font-display">TaskFlow
+                                      </h1>
+                    <p className="text-gray-600 mt-1">Organize your day, accomplish your goals
+                                      </p>
+                </div>
+                <div className="flex items-center gap-3">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowMobileFilters(!showMobileFilters)}
+                        className="lg:hidden">
+                        <ApperIcon name="Filter" size={16} />
+                    </Button>
+                    <Button onClick={() => setShowAddForm(true)} className="flex items-center gap-2">
+                        <ApperIcon name="Plus" size={16} />
+                        <span className="hidden sm:inline">Add Task</span>
+                    </Button>
+                </div>
             </div>
-            
-            <div className="flex items-center gap-3">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowMobileFilters(!showMobileFilters)}
-                className="lg:hidden"
-              >
-                <ApperIcon name="Filter" size={16} />
-              </Button>
-              
-              <Button
-                onClick={() => setShowAddForm(true)}
-                className="flex items-center gap-2"
-              >
-                <ApperIcon name="Plus" size={16} />
-                <span className="hidden sm:inline">Add Task</span>
-              </Button>
-            </div>
-          </div>
-
-          {/* Main Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            {/* Category Sidebar */}
-            <div className="lg:col-span-1 order-2 lg:order-1">
-              <div className="space-y-4">
-                <CategorySidebar
-                  categories={categories}
-                  activeCategory={activeCategory}
-                  onCategorySelect={setActiveCategory}
-                />
-                
-                {/* Mobile Filters */}
-                <AnimatePresence>
-                  {(showMobileFilters || window.innerWidth >= 1024) && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="lg:block"
-                    >
-                      <FilterToolbar
-                        activeFilters={activeFilters}
-                        onFilterChange={handleFilterChange}
-                        onClearFilters={handleClearFilters}
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-
-            {/* Task List */}
-            <div className="lg:col-span-2 order-1 lg:order-2">
-              <div className="space-y-4">
-                {/* Search Bar */}
-                <SearchBar
-                  onSearch={setSearchQuery}
-                  placeholder="Search tasks..."
-                />
-
-                {/* Add Task Form */}
-                <AnimatePresence>
-                  {(showAddForm || editingTask) && (
-                    <AddTaskForm
-                      categories={categories}
-                      onSubmit={editingTask ? handleEditTask : handleAddTask}
-                      onCancel={() => {
-                        setShowAddForm(false);
-                        setEditingTask(null);
-                      }}
-                      initialData={editingTask}
-                    />
-                  )}
-                </AnimatePresence>
-
+            {/* Main Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                {/* Category Sidebar */}
+                <div className="lg:col-span-1 order-2 lg:order-1">
+                    <div className="space-y-4">
+                        <CategorySidebar
+                            categories={categories}
+                            activeCategory={activeCategory}
+                            onCategorySelect={setActiveCategory}
+                            onAddCategory={() => setShowAddCategoryForm(true)} />
+                        {/* Mobile Filters */}
+                        <AnimatePresence>
+                            {(showMobileFilters || window.innerWidth >= 1024) && <motion.div
+                                initial={{
+                                    opacity: 0,
+                                    height: 0
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    height: "auto"
+                                }}
+                                exit={{
+                                    opacity: 0,
+                                    height: 0
+                                }}
+                                className="lg:block">
+                                <FilterToolbar
+                                    activeFilters={activeFilters}
+                                    onFilterChange={handleFilterChange}
+                                    onClearFilters={handleClearFilters} />
+                            </motion.div>}
+                        </AnimatePresence>
+                    </div>
+                </div>
                 {/* Task List */}
-                <TaskList
-                  tasks={displayTasks}
-                  categories={categories}
-                  onToggleComplete={handleToggleComplete}
-                  onEditTask={setEditingTask}
-                  onDeleteTask={handleDeleteTask}
-                  searchQuery={searchQuery}
-                  activeFilters={activeFilters}
-                />
-              </div>
+                <div className="lg:col-span-2 order-1 lg:order-2">
+                    <div className="space-y-4">
+                        {/* Search Bar */}
+                        <SearchBar onSearch={setSearchQuery} placeholder="Search tasks..." />
+                        {/* Add Category Form */}
+                        <AnimatePresence>
+                            {showAddCategoryForm && <AddCategoryForm onSubmit={handleAddCategory} onCancel={handleCancelAddCategory} />}
+                        </AnimatePresence>
+                        {/* Add Task Form */}
+                        <AnimatePresence>
+                            {(showAddForm || editingTask) && <AddTaskForm
+                                categories={categories}
+                                onSubmit={editingTask ? handleEditTask : handleAddTask}
+                                onCancel={() => {
+                                    setShowAddForm(false);
+                                    setEditingTask(null);
+                                }}
+                                initialData={editingTask} />}
+                        </AnimatePresence>
+                        {/* Task List */}
+                        <TaskList
+                            tasks={displayTasks}
+                            categories={categories}
+                            onToggleComplete={handleToggleComplete}
+                            onEditTask={setEditingTask}
+                            onDeleteTask={handleDeleteTask}
+                            searchQuery={searchQuery}
+                            activeFilters={activeFilters} />
+                    </div>
+                </div>
+                {/* Progress Widget */}
+                <div className="lg:col-span-1 order-3">
+                    <ProgressWidget stats={stats} />
+                </div>
             </div>
-
-            {/* Progress Widget */}
-            <div className="lg:col-span-1 order-3">
-              <ProgressWidget stats={stats} />
-            </div>
-          </div>
         </div>
-      </div>
     </div>
+</div>
   );
 };
 
