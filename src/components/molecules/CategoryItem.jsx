@@ -27,7 +27,7 @@ const CategoryItem = ({
         <span className="font-medium">{category.Name}</span>
       </div>
       
-      {category.task_count > 0 && (
+{category.task_count > 0 && (
         <Badge 
           variant={isActive ? 'primary' : 'default'}
           size="xs"
@@ -35,6 +35,7 @@ const CategoryItem = ({
           {category.task_count}
         </Badge>
       )}
+    </motion.button>
   );
 };
 
