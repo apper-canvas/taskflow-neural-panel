@@ -49,17 +49,19 @@ const allTasksCount = categories.reduce((sum, cat) => sum + cat.task_count, 0);
           </motion.div>
         ))}
       </div>
-
-      {/* Add Category Button */}
-<motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={onAddCategory}
-        className="w-full mt-4 p-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-primary hover:text-primary transition-colors duration-200 flex items-center justify-center gap-2"
-      >
-        <ApperIcon name="Plus" size={16} />
-        <span className="text-sm font-medium">Add Category</span>
-      </motion.button>
+{/* Divider */}
+      <div className="border-t border-gray-100 mt-4 pt-4">
+        {/* Add Category Button */}
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={onAddCategory}
+          className="w-full p-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-primary hover:text-primary transition-colors duration-200 flex items-center justify-center gap-2"
+        >
+          <ApperIcon name="Plus" size={16} />
+          <span className="text-sm font-medium">Add Category</span>
+        </motion.button>
+      </div>
     </div>
   );
 };
