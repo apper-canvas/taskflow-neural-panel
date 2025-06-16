@@ -2,15 +2,15 @@ import React, { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { categoryService, taskService } from "@/services";
-import TaskList from "@/components/organisms/TaskList";
 import CategorySidebar from "@/components/organisms/CategorySidebar";
+import ErrorState from "@/components/organisms/ErrorState";
+import SkeletonLoader from "@/components/organisms/SkeletonLoader";
+import TaskList from "@/components/organisms/TaskList";
 import ProgressWidget from "@/components/molecules/ProgressWidget";
 import SearchBar from "@/components/molecules/SearchBar";
 import FilterToolbar from "@/components/molecules/FilterToolbar";
 import AddTaskForm from "@/components/molecules/AddTaskForm";
 import AddCategoryForm from "@/components/molecules/AddCategoryForm";
-import ErrorState from "@/components/organisms/ErrorState";
-import SkeletonLoader from "@/components/organisms/SkeletonLoader";
 import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
 
@@ -261,10 +261,10 @@ const displayTasks = useMemo(() => {
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 font-display">TaskFlow
-                                      </h1>
+                    <h1 className="text-3xl font-bold text-gray-900 font-display">BhushanTasks
+                                                              </h1>
                     <p className="text-gray-600 mt-1">Organize your day, accomplish your goals
-                                      </p>
+                                                              </p>
                 </div>
                 <div className="flex items-center gap-3">
                     <Button
